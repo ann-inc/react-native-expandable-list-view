@@ -26,6 +26,7 @@ export type InnerItem = {
   name?: string;
   /**Add your custom Inner Item */
   customInnerItem?: JSX.Element;
+  value?: string;
 };
 
 export interface Item {
@@ -86,6 +87,7 @@ interface Props {
   defaultLoaderStyles?: ViewStyle;
   /** Pass your custom loader, while your content is measured and rendered (only for animated={true}) */
   customLoader?: JSX.Element;
+  InnerValueLabelStyle?: TextStyle;
 }
 
 interface ExpandableListItem {
@@ -140,7 +142,7 @@ function reducer(
   }
 }
 
-export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,renderItemSeparator,renderInnerItemSeparator,onInnerItemClick,onItemClick,defaultLoaderStyles,itemSeparatorStyle,itemLabelStyle,itemImageIndicatorStyle,itemContainerStyle,innerItemSeparatorStyle,innerItemContainerStyle,customLoader,customChevron,animated=true,chevronColor, ExpandableListViewStyles}) => {
+export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,InnerValueLabelStyle,renderItemSeparator,renderInnerItemSeparator,onInnerItemClick,onItemClick,defaultLoaderStyles,itemSeparatorStyle,itemLabelStyle,itemImageIndicatorStyle,itemContainerStyle,innerItemSeparatorStyle,innerItemContainerStyle,customLoader,customChevron,animated=true,chevronColor, ExpandableListViewStyles}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const CustomLoader = customLoader;
   useEffect(() => {
@@ -294,6 +296,11 @@ export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,re
       height: undefined,
     };
 
+    InnerValueLabelStyle= {
+      ...styles.text,
+      ...InnerValueLabelStyle
+    }
+
     innerItemSeparatorStyle = {
       ...styles.innerItemSeparator,
       ...innerItemSeparatorStyle,
@@ -316,7 +323,10 @@ export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,re
           {CustomComponent !== undefined ? (
             CustomComponent
           ) : (
-            <Text style={innerItemLabelStyle}>{item.name}</Text>
+            <View style={{flexDirection: "row",}}>
+              <Text style={innerItemLabelStyle}>{item.name}</Text>
+              <Text style={InnerValueLabelStyle}>{item.value}</Text>
+            </View>  
           )}
         </TouchableOpacity>
         {renderInnerItemSeparator !== undefined &&
@@ -328,12 +338,14 @@ export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,re
     );
   }
 
+
   function renderItem({item, index}: ExpandableListItem) {
 
     itemContainerStyle = {
       ...styles.header,
       ...itemContainerStyle,
       height: undefined,
+      position: "relative",
     };
     itemLabelStyle = {
       ...styles.headerText,
@@ -343,6 +355,10 @@ export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,re
       height: 15,
       width: 15,
       marginHorizontal: 5,
+      justifyContent: "flex-end",
+      alignItems: "flex-end",
+      position: "absolute",
+      right: 20,
       ...itemImageIndicatorStyle,
     };
 
@@ -362,6 +378,7 @@ export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,re
             CustomComponent
           ) : (
             <>
+              <Text style={itemLabelStyle}>{item.categoryName}</Text>
               <Animated.Image
                 source={
                   customChevron !== undefined
@@ -400,7 +417,6 @@ export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,re
                 ]}
               />
 
-              <Text style={itemLabelStyle}>{item.categoryName}</Text>
             </>
           )}
         </TouchableOpacity>
