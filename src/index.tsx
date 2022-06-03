@@ -14,10 +14,52 @@ import {
   FlatList,
 } from 'react-native';
 
-import {styles} from './styles';
 
-import white_chevron from './assets/images/white.png';
-import black_chevron from './assets/images/black.png';
+import {StyleSheet} from 'react-native';
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 30,
+    backgroundColor: '#e5f5Ff',
+  },
+  topHeading: {
+    paddingLeft: 10,
+    fontSize: 20,
+  },
+  header: {
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#e5f5Ff',
+    padding: 16,
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  text: {
+    fontSize: 16,
+    color: '#000',
+    paddingHorizontal: 16,
+  },
+  content: {
+    justifyContent: 'center',
+  },
+  headerSeparator: {
+    height: 1,
+    width: '100%',
+    backgroundColor: '#c1c2c3',
+    alignSelf: 'center',
+  },
+  innerItemSeparator: {
+    height: 1,
+    width: '100%',
+    backgroundColor: '#c1c2c3',
+    alignSelf: 'center',
+  },
+});
+
 
 export type InnerItem = {
   /**Inner Item id */
@@ -326,7 +368,7 @@ export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,In
             <View style={{flexDirection: "row",}}>
               <Text style={innerItemLabelStyle}>{item.name}</Text>
               <Text style={InnerValueLabelStyle}>{item.value}</Text>
-            </View>  
+            </View>
           )}
         </TouchableOpacity>
         {renderInnerItemSeparator !== undefined &&
@@ -385,8 +427,8 @@ export const ExpandableListView: React.FC<Props> = ({data,innerItemLabelStyle,In
                     ? customChevron
                     : chevronColor !== undefined &&
                       chevronColor === 'white'
-                    ? white_chevron
-                    : black_chevron
+                    ? require('./assets/images/white.png')
+                    : require('./assets/images/black.png')
                 }
                 resizeMethod="scale"
                 resizeMode="contain"
